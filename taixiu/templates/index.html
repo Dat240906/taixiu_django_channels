@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" coQntent="width=device-width, initial-scale=1.0" />
+    <title>MiniGame</title>
+    <link rel="icon" href="{% static 'taixiu/img/favicon.ico'%}" type="image/x-icon" />
+  </head>
+  <!-- <script src="{% static 'taixiu/js/test.js'%}"></script> -->
+  <body>
+    <canvas id="myCanvas" style="border: 1px solid black; display: block; width: 100vp"></canvas>
+    <audio id="soundBackground" loop>
+      <source src="{% static 'taixiu/sound/main.mp3'%}" type="audio/mp3" />
+    </audio>
+    <audio id="soundResult">
+      <source src="{% static 'taixiu/sound/result.mp3'%}" type="audio/mp3" />
+    </audio>
+    <audio id="soundClick">
+      <source src="{% static 'taixiu/sound/pickrate.mp3'%}" type="audio/mp3" />
+    </audio>
+    <audio id="soundXuc">
+      <source src="{% static 'taixiu/sound/xuc.mp3'%}" type="audio/mp3" />
+    </audio>
+
+    <script>
+      const BASE_PATH_IMG_BASE = "{% static 'taixiu/img/img_base/' %}";
+      const BASE_PATH_IMG = "{% static 'taixiu/img/' %}";
+      const BASE_PATH_FONT = "{% static 'taixiu/font/'%}";
+      const BASE_PATH_IMG_DICE = "{% static 'taixiu/img/img_dices'%}";
+      BASE_PATH_IMG_ANI = "{%static 'taixiu/img/img_animation'%}";
+    </script>
+    <script src="{% static 'taixiu/js/game.js'%}"></script>
+
+    <script>
+      let docTitle = document.title;
+      window.addEventListener('blur', () => {
+        document.title = '6 3 ra 1 😩';
+      });
+      window.addEventListener('focus', () => {
+        document.title = docTitle;
+      });
+    </script>
+  </body>
+</html>

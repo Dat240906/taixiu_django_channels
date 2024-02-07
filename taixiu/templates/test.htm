@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+    <title>Animation</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const imageCount = 46;
+        const images = [];
+        const dataImage = {
+            x:100,
+            y:100,
+            w:70,
+            h:70
+        }
+        const current_dataImage = {
+            x:100,
+            y:100,
+            w:70,
+            h:70
+        }
+        for (let i = 1; i <= imageCount; i++) {
+            const img = new Image()
+            img.src = `./img_animation/${i}.png`
+            images.push(img)
+        }
+        i=0
+        zoom = 20
+        change_dxdy = zoom/2
+        function draw() {   
+            ctx.clearRect(0, 0, 800, 600);
+
+            if (i>=14 && i<= 18) {
+                dataImage.w +=zoom
+                dataImage.h +=zoom
+                dataImage.x -=change_dxdy
+                dataImage.y -=change_dxdy
+            }else if (i>=19 && i<=23) {
+                dataImage.w -=zoom
+                dataImage.h -=zoom
+                dataImage.x +=change_dxdy
+                dataImage.y +=change_dxdy
+            }
+            ctx.drawImage(images[i], dataImage.x, dataImage.y, dataImage.w, dataImage.h)
+            
+            i++
+                
+        }
+
+        // Bắt đầu vẽ
+        setInterval(draw, 80)
+    </script>
+</body>
+</html>
