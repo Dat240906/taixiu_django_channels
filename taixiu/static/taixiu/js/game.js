@@ -791,6 +791,9 @@ function handleClickObject(x, y) {
 
       is_cuoc_tai = true;
       is_cuoc_xiu = false;
+      if (num_countdown >= 5) {
+        get_money_user(username);
+      }
     }
   } else if (x >= positon_img_cuoc_xiu.x && x <= positon_img_cuoc_xiu.x + positon_img_cuoc_xiu.w && y >= positon_img_cuoc_xiu.y && y <= positon_img_cuoc_xiu.y + positon_img_cuoc_xiu.h) {
     if (total_coin_user_bet_tai === '0') {
@@ -799,6 +802,9 @@ function handleClickObject(x, y) {
       }
       is_cuoc_xiu = true;
       is_cuoc_tai = false;
+      if (num_countdown >= 5) {
+        get_money_user(username);
+      }
     }
   } else if ((is_cuoc_tai || is_cuoc_xiu) && x >= positon_img_1k.x && x <= positon_img_1k.x + positon_img_1k.w && y >= positon_img_1k.y && y <= positon_img_1k.y + positon_img_1k.h) {
     plusCoinPick(1000);
@@ -843,6 +849,7 @@ function handleClickObject(x, y) {
           user_choose = 1;
           money_bet = parseInt(total_coin_user_bet_tai);
           user.coin = (parseInt(user.coin) - parseInt(total_coin_user_pick_tai)).toString();
+          truMoney(username, total_coin_user_pick_tai);
         }
       } else if (is_cuoc_xiu) {
         if (parseInt(user.coin) >= parseInt(total_coin_user_pick_xiu)) {
@@ -850,6 +857,7 @@ function handleClickObject(x, y) {
           user_choose = 0;
           money_bet = parseInt(total_coin_user_bet_xiu);
           user.coin = (parseInt(user.coin) - parseInt(total_coin_user_pick_xiu)).toString();
+          truMoney(username, total_coin_user_pick_xiu);
         }
       }
       sendData(socket);
@@ -918,26 +926,46 @@ function handleClickObject(x, y) {
 
 // <!-- LOGIN  -->
 
-let username = 'thanhdat';
-let password = '1';
-while (true) {
-  username = prompt('Username: ');
+let username = '';
+let password = '';
 
-  if (!username) {
-    alert('Vui lòng nhập username.');
-  } else {
-    while (true) {
-      password = prompt('Password: ');
+setTimeout(async () => {
+  while (true) {
+    var is_login = false;
+    username = prompt('Username: ');
 
-      if (!password) {
-        alert('Vui lòng nhập mật khẩu.');
-      } else {
-        break;
+    if (!username) {
+      alert('Vui lòng nhập username.');
+    } else {
+      while (true) {
+        password = prompt('Password: ');
+
+        if (!password) {
+          alert('Vui lòng  nhập mật khẩu.');
+        } else {
+          try {
+            const response = await fetch(`/get-data-user/?username=${username}&&password=${password}`);
+            const data = await response.json();
+
+            if (data.status == 'error') {
+              is_login = false;
+            } else if (data.status == 'success') {
+              is_login = true;
+              break;
+            }
+          } catch (error) {
+            throw error; // Re-throw the error so it can be handled outside
+          }
+          if (is_login) {
+            break;
+          }
+        }
       }
+      get_money_user(username);
+      break;
     }
-    break;
   }
-}
+}, 100);
 
 // <!-- kết nối với server -->
 
@@ -950,13 +978,13 @@ if (window.location.protocol === 'https:') {
 const socket = new WebSocket(`${ws_protocol}${window.location.host}/ws/connect/`);
 
 socket.onopen = (event) => {
-  socket.send(
-    JSON.stringify({
-      status: 'info',
-      username: username,
-      password: password,
-    })
-  );
+  // socket.send(
+  //   JSON.stringify({
+  //     status: 'info',
+  //     username: username,
+  //     password: password,
+  //   })
+  // );
 };
 socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
@@ -1134,6 +1162,28 @@ async function get_money_user(username) {
     const response = await fetch(`/get-money/?username=${username}`);
     const data = await response.json();
     user.coin = data.money.toString();
+  } catch (error) {
+    throw error; // Re-throw the error so it can be handled outside
+  }
+}
+async function truMoney(username, money) {
+  try {
+    const response = await fetch(`/tru-money/?username=${username}&&money=${money}`);
+  } catch (error) {
+    throw error; // Re-throw the error so it can be handled outside
+  }
+}
+
+async function login(username, password) {
+  try {
+    const response = await fetch(`/get-data-user/?username=${username}&&password=${password}`);
+    const data = await response.json();
+
+    if (data.status == 'error') {
+      return;
+    }
+
+    is_login = true;
   } catch (error) {
     throw error; // Re-throw the error so it can be handled outside
   }

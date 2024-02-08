@@ -3,7 +3,6 @@ import time
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.core.cache import  cache
-from .models import UserModel
 from rest_framework.views import APIView 
 # Create your views here.
 
@@ -15,27 +14,37 @@ class login(APIView):
         username = request.GET.get('username')
         password = request.GET.get('password')
 
-        try:
-            user = UserModel.objects.get(username = username)
-            return JsonResponse({
-                'status':'login',
-                'money':user.money
-            })
-        except UserModel.DoesNotExist:
-            user = UserModel.objects.create(username = username, password=password)
-            return JsonResponse({
-                'status':'create',
-                'money':user.money
-            })
+        user_data = cache.get(username, None) #username : [password, money]
         
+        # if username in all_key_user and password!=user_data[1]:
+        #     return JsonResponse({
+        #         'status':'error',
+        #     })
+        
+        if user_data:
+            if user_data[0] == password:
+                return JsonResponse({
+                    'status':'success',
+                    'money':user_data[1]
+                })  
+            return JsonResponse({
+                'status':'error',
+            })
+        else:
+            cache.set(username, [password, 100000])
+            user_data = cache.get(username)
+            return JsonResponse({
+                'status':'success',
+                'money':user_data[1]
+            })
 
 def get_money(request):
     username = request.GET.get('username')
 
-    user = UserModel.objects.get(username = username)
+    user_data = cache.get(username)
     return JsonResponse({
         'status':'success',
-        'money':user.money
+        'money':user_data[1]
     })
     
 
@@ -47,15 +56,30 @@ def handleResult(request):
     status = data.get('status')
     money = data.get('money')
 
-    user = UserModel.objects.get(username =username)
-    money_db = user.money
+    user_data = cache.get(username)
+    money_db = user_data[1]
     if status == 'cong':
-        user.money = int(money_db)-int(money)+int(money)*1.98
+        user_data[1] = int(money_db)+int(money)*1.98
     elif status == 'tru':
-        user.money = int(money_db)- int(money)
+        pass
 
 
-    user.save()
+    cache.set(username, user_data)
+    return JsonResponse({
+        'status':'success'
+    })
+
+
+def truMoney(request):
+    data = request.GET
+
+    username = data.get('username')
+    money = data.get('money')
+
+    user_data = cache.get(username)
+    user_data[1] -= int(money)
+
+    cache.set(username, user_data)
     return JsonResponse({
         'status':'success'
     })

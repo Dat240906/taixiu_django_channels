@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,7 @@ SECRET_KEY = 'django-insecure-$pl2!t4#3ydx9%a84k&h%ur*a@b^%8u8ha-3^oad0=!rc7j(*!
 DEBUG = True
 
 ALLOWED_HOSTS = ['taixiu-06.onrender.com']
+# ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -78,21 +80,11 @@ ASGI_APPLICATION = 'core.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-TIME_ZONE = 'UTC'
 
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pwmyunta',         # Tên cơ sở dữ liệu
-        'USER': 'pwmyunta',         # Tên người dùng
-        'PASSWORD': 'Hvck3Smeqzr1J1daUbZCTM-QND0pD93a',     # Mật khẩu
-        'HOST': 'satao.db.elephantsql.com',  # Địa chỉ hoặc IP của máy chủ PostgreSQL
-        'PORT': '5432',             # Cổng PostgreSQL mặc định
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(os.path.join(BASE_DIR, "db.sqlite3"))
     }
 }
 
@@ -128,6 +120,15 @@ USE_I18N = True
 USE_TZ = True
 
 
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [("localhost", 6379)],  # Thay đổi localhost và port nếu cần thiết
+#         },
+#     },
+# }
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -136,8 +137,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
-
 # # Celery Configuration
 # CELERY_BROKER_URL = 'redis://localhost:6379/0'
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
