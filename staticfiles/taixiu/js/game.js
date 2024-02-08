@@ -941,14 +941,14 @@ while (true) {
 
 // <!-- kết nối với server -->
 
-var ws_protocol = '';
-if (window.location.protocol === 'https:') {
-  ws_protocol = 'wss://';
-} else if (window.location.protocol === 'http:') {
-  ws_protocol = 'ws://';
-}
-const socket = new WebSocket(`${ws_protocol}${window.location.host}/ws/connect`);
-
+// var ws_protocol = '';
+// if (window.location.protocol === 'https:') {
+//   ws_protocol = 'wss://';
+// } else if (window.location.protocol === 'http:') {
+//   ws_protocol = 'ws://';
+// }
+const socket = new WebSocket(`wss://${window.location.host}/ws/connect`);
+console.log(socket);
 socket.onopen = (event) => {
   socket.send(
     JSON.stringify({
