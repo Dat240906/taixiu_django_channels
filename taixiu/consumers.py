@@ -8,7 +8,7 @@ import httpx
 
 num = 46
 num_15s = 17
-list_resutl = [-1]* 16 # kết quả sẽ được lưu
+list_resutl = [1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1] # kết quả sẽ được lưu
 money_total_random_tai = 0
 money_total_random_xiu = 0
 
