@@ -1041,7 +1041,10 @@ socket.onmessage = (event) => {
     }
   }
 };
-
+// Xác định hàm xử lý khi có lỗi xảy ra
+socket.onerror = function (event) {
+  console.error('WebSocket error:', event);
+};
 function sendData(socket) {
   socket.send(
     JSON.stringify({
