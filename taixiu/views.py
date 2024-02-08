@@ -57,9 +57,8 @@ def handleResult(request):
     money = data.get('money')
 
     user_data = cache.get(username)
-    money_db = user_data[1]
     if status == 'cong':
-        user_data[1] = int(money_db)+int(money)*1.98
+        user_data[1] += int(money)*1.98
     elif status == 'tru':
         pass
 
