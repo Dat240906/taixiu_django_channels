@@ -947,7 +947,7 @@ if (window.location.protocol === 'https:') {
 } else if (window.location.protocol === 'http:') {
   ws_protocol = 'ws://';
 }
-const socket = new WebSocket(`${ws_protocol}${window.location.host}/ws/connect`);
+const socket = new WebSocket(`${ws_protocol}${window.location.host}/ws/connect/`);
 
 socket.onopen = (event) => {
   socket.send(
