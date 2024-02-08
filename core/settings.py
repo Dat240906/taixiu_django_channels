@@ -78,11 +78,21 @@ ASGI_APPLICATION = 'core.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+TIME_ZONE = 'UTC'
 
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'pwmyunta',         # Tên cơ sở dữ liệu
+        'USER': 'pwmyunta',         # Tên người dùng
+        'PASSWORD': 'Hvck3Smeqzr1J1daUbZCTM-QND0pD93a',     # Mật khẩu
+        'HOST': 'satao.db.elephantsql.com',  # Địa chỉ hoặc IP của máy chủ PostgreSQL
+        'PORT': '5432',             # Cổng PostgreSQL mặc định
     }
 }
 
