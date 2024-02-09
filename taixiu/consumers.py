@@ -261,7 +261,7 @@ class Connect(AsyncWebsocketConsumer):
         endpoint = 'get-data-user'  # Thay đổi địa chỉ endpoint tùy theo yêu cầu của bạn
 
         # Xây dựng URL hoàn chỉnh với host và endpoint
-        full_url = f"http://{self.scope['server'][0]}:{self.scope['server'][1]}/{endpoint}/?username={self.username}&password={self.password}"
+        full_url = f"https://{self.scope['server'][0]}:{self.scope['server'][1]}/{endpoint}/?username={self.username}&password={self.password}"
       
         
 
