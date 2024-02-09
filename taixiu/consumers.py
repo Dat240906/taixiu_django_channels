@@ -283,12 +283,12 @@ class Connect(AsyncWebsocketConsumer):
         global list_resutl, money_user_bet, list_user_win
         endpoint_handleResult = 'handleResult'  
       
-        protocol = ''
-        is_secure = self.scope.get("type") == "https"
-        if is_secure:
-            protocol = 'https://'
-        else:
-            protocol = 'http://'
+        protocol = 'https://'
+        # is_secure = self.scope.get("type") == "https"
+        # if is_secure:
+        #     protocol = 'https://'
+        # else:
+        #     protocol = 'http://'
         full_url = f"{protocol}{self.scope['server'][0]}:{self.scope['server'][1]}"
 
         # Xây dựng URL hoàn chỉnh với host và endpoint
