@@ -135,7 +135,7 @@ var num_countdown_15s = 0;
 var num_round = 0;
 var user_choose = -1;
 var money_bet = 0;
-var list_user_win = [];
+var list_user_win = '';
 
 var FPS = 45;
 var is_show_list_user_win = false;
@@ -609,7 +609,7 @@ function plusMoney() {
   }
   if (position_plus.y > -60) {
     position_plus.y -= 1;
-    context.fillText(`+${formatNumToIncludeDot(list_user_win[username].toString())}`, positon_img_table.x + size_img_table.w / 2, positon_img_table.y + size_img_table.h - 70 + position_plus.y);
+    context.fillText(`+${formatNumToIncludeDot(list_user_win.toString())}`, positon_img_table.x + size_img_table.w / 2, positon_img_table.y + size_img_table.h - 70 + position_plus.y);
   }
 }
 
@@ -1015,6 +1015,7 @@ socket.onmessage = (event) => {
       is_cuoc_xiu = false;
       total_coin_user_pick_tai = '0';
       total_coin_user_pick_xiu = '0';
+      plusMoney_changeServer(username, money_bet, dice1, dice2, dice3);
       soundXuc();
       is_xuc = true;
       i_ANI = 0;
@@ -1062,12 +1063,6 @@ socket.onmessage = (event) => {
       }
     }
   }
-  if (data.status == 'list_user_win') {
-    list_user_win = data.list_user_win;
-    if (list_user_win[username]) {
-      is_show_list_user_win = true;
-    }
-  }
 };
 
 function sendData(socket) {
@@ -1079,6 +1074,30 @@ function sendData(socket) {
       money_bet: money_bet,
     })
   );
+}
+
+async function plusMoney_changeServer(username, money_bet, dice1, dice2, dice3) {
+  if (user_choose == -1) {
+    return;
+  }
+  if (user_choose == 1 && dice1 + dice2 + dice3 >= 11) {
+    try {
+      const response = await fetch(`/handleResult/?username=${username}&&money=${money_bet}`);
+    } catch (error) {
+      throw error; // Re-throw the error so it can be handled outside
+    }
+    is_show_list_user_win = true;
+    list_user_win = `${parseInt(money_bet) * 1.98}`;
+  } else if (user_choose == 0 && dice1 + dice2 + dice3 <= 10) {
+    try {
+      const response = await fetch(`/handleResult/?username=${username}&&money=${money_bet}`);
+    } catch (error) {
+      throw error; // Re-throw the error so it can be handled outside
+    }
+    is_show_list_user_win = true;
+
+    list_user_win = `${parseInt(money_bet) * 1.98}`;
+  }
 }
 
 // <!-- sound -->

@@ -75,7 +75,6 @@ class Connect(AsyncWebsocketConsumer):
                                 'dice2':dice2,
                                 'dice3':dice3,
                             })
-                await self.handleResult()
                 await self.channel_layer.group_send('taixiu_group', {
                     'type':'sendToGroup',
                     'status':'list_user_win',
@@ -149,28 +148,7 @@ class Connect(AsyncWebsocketConsumer):
             self.username = data['username']
             self.password = data['password']
             await self.login()
-        if data['status'] == 'bet':
-            username = data['username']
-            choose = data['choose']
-            money_bet = data['money_bet']
 
-            if money_bet == 0: 
-                return 
-            try:
-                did = money_user_bet[f'{username}']
-                if choose == 1:
-                    money_total_random_tai += money_bet - did[1]
-                else:
-                    money_total_random_xiu += money_bet - did[1]
-            except KeyError:
-                if choose == 1:
-                    money_total_random_tai += money_bet
-                else:
-                    money_total_random_xiu += money_bet
-            money_user_bet[f'{username}'] = [choose, money_bet]
-            # Xử lý tin nhắn và gửi lại kết quả
-            # response_data = {'message': f'You said: {message}'}
-        # await self.send(text_data=json.dumps(response_data))
 
 
     async def sendToGroup(self, event):
@@ -279,17 +257,7 @@ class Connect(AsyncWebsocketConsumer):
             else:
                 await self.send(text_data='Error: Unable to fetch data from API')
 
-    async def handleResult(self):
-        global list_resutl, money_user_bet, list_user_win
-        endpoint_handleResult = 'handleResult'  
-   
-        # Xây dựng URL hoàn chỉnh với host và endpoint
-        async with httpx.AsyncClient() as client:
-            for key, value in money_user_bet.items():
-                if (value[0] == list_resutl[0]):
-                    list_user_win[key] = value[1] * 1.98
-                    await client.get(f"https://{self.scope['server'][0]}:{self.scope['server'][1]}/{endpoint_handleResult}/?username={key}&money={str(value[1])}")
-                   
+
                     
 
 
