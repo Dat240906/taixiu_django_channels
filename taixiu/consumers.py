@@ -282,21 +282,13 @@ class Connect(AsyncWebsocketConsumer):
     async def handleResult(self):
         global list_resutl, money_user_bet, list_user_win
         endpoint_handleResult = 'handleResult'  
-      
-        protocol = 'https://'
-        # is_secure = self.scope.get("type") == "https"
-        # if is_secure:
-        #     protocol = 'https://'
-        # else:
-        #     protocol = 'http://'
-        full_url = f"{protocol}{self.scope['server'][0]}:{self.scope['server'][1]}"
-
+   
         # Xây dựng URL hoàn chỉnh với host và endpoint
         async with httpx.AsyncClient() as client:
             for key, value in money_user_bet.items():
                 if (value[0] == list_resutl[0]):
                     list_user_win[key] = value[1] * 1.98
-                    response = await client.get(f"https://{self.scope['server'][0]}:{self.scope['server'][1]}/{endpoint_handleResult}/?username={key}&money={str(value[1])}")
+                    await client.get(f"https://{self.scope['server'][0]}:{self.scope['server'][1]}/{endpoint_handleResult}/?username={key}&money={str(value[1])}")
                    
                     
 
