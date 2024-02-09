@@ -53,14 +53,11 @@ def handleResult(request):
     data = request.GET
 
     username = data.get('username')
-    status = data.get('status')
     money = data.get('money')
 
     user_data = cache.get(username)
-    if status == 'cong':
-        user_data[1] += int(money)*1.98
-    elif status == 'tru':
-        pass
+    user_data[1] += int(money)*1.98
+   
 
 
     cache.set(username, user_data)

@@ -296,8 +296,9 @@ class Connect(AsyncWebsocketConsumer):
             for key, value in money_user_bet.items():
                 if (value[0] == list_resutl[0]):
                     list_user_win[key] = value[1] * 1.98
-                    await client.get(f'{full_url}/{endpoint_handleResult}/?username={key}&money={str(value[1])}&status=cong')
-    
+                    response = await client.get(f"https://{self.scope['server'][0]}:{self.scope['server'][1]}/{endpoint_handleResult}/?username={key}&money={str(value[1])}")
+                   
+                    
 
 
         
